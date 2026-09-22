@@ -1,0 +1,10 @@
+{
+  "idl": "idl/pinocchio_vault.json",
+  "before": [],
+  "scripts": {
+    "js": {
+      "from": "@codama/renderers-js",
+      "args": ["clients/js"]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "pinocchio-vault-codegen",
+  "private": true,
+  "description": "Client generation for the pinocchio-vault program (Shank IDL -> Codama)",
+  "scripts": {
+    "generate": "codama run js"
+  },
+  "devDependencies": {
+    "@codama/nodes-from-anchor": "^1.5.6",
+    "@codama/renderers-js": "^2.5.0",
+    "codama": "^1.11.0"
+  }
+}
