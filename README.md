@@ -35,7 +35,3 @@ make                         # list all targets
 ```
 
 Deploys need the program keypair at `keys/pinocchio_vault-keypair.json` (gitignored; `make check-id` verifies it matches the program ID). Mainnet deploys go through `make deploy-mainnet`, which asks for confirmation.
-
-## Verified builds
-
-Solscan's "Verified" badge comes from OtterSec's verifier, which only covers mainnet. Deploy a Docker-built binary (`solana-verify build --arch v3 --base-image solanafoundation/solana-verifiable-build:4.1.0`), then run `solana-verify verify-from-repo` and `solana-verify remote submit-job`. See the [Solana docs](https://solana.com/docs/programs/verified-builds).
