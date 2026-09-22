@@ -23,9 +23,17 @@ CLUSTER         ?= localhost
 
 IDL_DIR         := idl
 IDL             := $(IDL_DIR)/pinocchio_vault.json
+CODAMA_IDL      := $(IDL_DIR)/pinocchio_vault.codama.json
+
+RPC_localhost    := http://127.0.0.1:8899
+RPC_devnet       := https://api.devnet.solana.com
+RPC_mainnet-beta := https://api.mainnet-beta.solana.com
+# `:=` so a shell-exported RPC_URL (other chains) can't leak in; override with
+# `make ... CLUSTER_RPC=https://...` if you need a private endpoint.
+CLUSTER_RPC      := $(RPC_$(CLUSTER))
 
 .DEFAULT_GOAL := help
-.PHONY: help tools build test fmt lint check idl client generate \
+.PHONY: help tools build test fmt lint check idl idl-upload idl-fetch client generate \
         localnet deploy deploy-mainnet program-id check-id show clean
 
 help: ## List targets
@@ -55,8 +63,18 @@ check: lint test ## Everything CI would run
 
 # ---- codegen ----------------------------------------------------------------
 
-idl: ## Generate the Shank IDL -> idl/pinocchio_vault.json
+idl: ## Generate the Shank IDL + its Codama form -> idl/
 	shank idl --crate-root . --out-dir $(IDL_DIR) --program-id $(PROGRAM_ID)
+	pnpm exec codama convert $(IDL) $(CODAMA_IDL)
+
+idl-upload: idl check-id ## Publish the Codama IDL on-chain (Program Metadata) to CLUSTER
+	@if [ "$(CLUSTER)" = "mainnet-beta" ]; then echo "refusing mainnet; run the command by hand"; exit 1; fi
+	npx -y @solana-program/program-metadata@0.10.0 write idl $(PROGRAM_ID) $(CODAMA_IDL) \
+		--keypair $(WALLET) \
+		--rpc $(CLUSTER_RPC)
+
+idl-fetch: ## Fetch the on-chain IDL from CLUSTER
+	npx -y @solana-program/program-metadata@0.10.0 fetch idl $(PROGRAM_ID) --rpc $(CLUSTER_RPC)
 
 client: idl ## Generate the TS client (@solana/kit) from the IDL -> clients/js
 	pnpm exec codama run js
