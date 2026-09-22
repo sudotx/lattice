@@ -9,16 +9,16 @@ Program ID: `G9S9ELuKARYok1H8QguVSZ5mu7VoT3FfRBqeFL3vK3uW` (devnet)
 
 Vault PDA seeds: `["vault", owner]`. Instruction data starts with a 1-byte discriminator.
 
-| # | Instruction | Data | Accounts |
-|---|---|---|---|
-| 0 | `Deposit` | `amount: u64` (LE, > 0) | `owner` (signer, writable), `vault` (writable), `system_program` |
-| 1 | `Withdraw` | — | `owner` (signer, writable), `vault` (writable) |
+| #   | Instruction | Data                    | Accounts                                                         |
+| --- | ----------- | ----------------------- | ---------------------------------------------------------------- |
+| 0   | `Deposit`   | `amount: u64` (LE, > 0) | `owner` (signer, writable), `vault` (writable), `system_program` |
+| 1   | `Withdraw`  | —                       | `owner` (signer, writable), `vault` (writable)                   |
 
 The first deposit creates the vault, including when someone has already sent lamports to the PDA address.
 
 ## Prerequisites
 
-- Agave 4.x toolchain (pinocchio 0.11 needs rustc >= 1.89). The Makefile points `SOLANA_BIN` at a local 4.x install; override it if yours lives elsewhere.
+- Agave 4.x toolchain (pinocchio 0.11 needs rustc >= 1.89). The Makefile points `SOLANA_BIN` at a local 4.x install;
 - Node + pnpm (IDL / client codegen)
 - `make tools` installs `shank-cli` and the Codama deps
 
@@ -34,4 +34,4 @@ make idl-upload CLUSTER=devnet
 make                         # list all targets
 ```
 
-Deploys need the program keypair at `keys/pinocchio_vault-keypair.json` (gitignored; `make check-id` verifies it matches the program ID). Mainnet deploys go through `make deploy-mainnet`, which asks for confirmation.
+Deploys need the program keypair at `keys/pinocchio_vault-keypair.json`.
