@@ -1,0 +1,29 @@
+[package]
+name = "pinocchio-vault"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+pinocchio = { version = "0.11.2", features = ["cpi"] }
+pinocchio-log = "0.5.1"
+pinocchio-system = "0.6.1"
+shank = "0.4.9"
+solana-address = { version = "2", features = ["decode"] }
+
+# Off-chain builds (`cargo test`) need a software PDA derivation; on-chain uses the syscall.
+[target.'cfg(not(target_os = "solana"))'.dependencies]
+solana-address = { version = "2", features = ["decode", "curve25519"] }
+
+[dev-dependencies]
+litesvm = "0.16"
+solana-keypair = "3.1"
+solana-signer = "3.0"
+solana-system-interface = { version = "3.2", features = ["bincode"] }
+solana-transaction = "4.1"
+
+[lints.rust.unexpected_cfgs]
+level = "warn"
+check-cfg = ['cfg(target_os, values("solana"))']

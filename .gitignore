@@ -1,0 +1,4 @@
+/target
+/node_modules
+# Program keypairs are secrets (upgrade identity) — back them up, never commit.
+/keys
